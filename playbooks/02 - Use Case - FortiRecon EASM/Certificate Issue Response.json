@@ -4,7 +4,7 @@
     "name": "Certificate Issue Response",
     "aliasName": null,
     "tag": null,
-    "description": "Creates a ServiceNow incident for the asset with certificate issue",
+    "description": "Creates a ServiceNow incident for the asset with a certificate issue discovered in the FortiRecon EASM scan.",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -48,6 +48,7 @@
             "arguments": {
                 "alertIRI": "{{vars.input.records[0]['@id']}}",
                 "alertName": "{{vars.input.records[0].name}}",
+                "sourceData": "{{vars.input.records[0].sourcedata}}",
                 "useMockOutput": "{{globalVars.Demo_mode}}",
                 "alertDescription": "{{vars.input.records[0].description}}"
             },
@@ -144,7 +145,7 @@
                     "caller_id": "{{vars.steps.Get_Users.data.result[0].name}}",
                     "work_notes": "",
                     "assigned_to": "{{vars.steps.Get_Users.data.result[0].name}}",
-                    "description": "{{vars.alertDescription}}",
+                    "description": "FortiRecon EASM has discovered the following certificate issue on the asset:\n\nAsset - {{vars.sourceData.asset}}\nBucket - {{vars.sourceData['bucket']}}\nBucket ID - {{vars.sourceData['bucket_id']}}\nStatus - {{vars.sourceData.status | capitalize or 'NA'}}\nSeverity - {{vars.sourceData.severity | capitalize or 'NA'}}\nUser Name - {{vars.sourceData['user_name'] or 'NA'}}",
                     "other_fields": "",
                     "assignment_group": "",
                     "short_description": "{{vars.alertName}}"
@@ -194,7 +195,7 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "alerts": "{{vars.alertIRI}}",
                     "people": [],
-                    "content": "<p>A ServiceNow incident <strong>#{{vars.steps.Create_ServiceNow_Incident.data.result.number}}<\/strong> has been created for the alert.<\/p>",
+                    "content": "<p>A ServiceNow ticket <strong>#{{vars.steps.Create_ServiceNow_Incident.data.result.number}}<\/strong> has been created for this alert.<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false
