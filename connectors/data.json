@@ -1,0 +1,24 @@
+[
+    {
+        "name": "fortinet-fortirecon-easm",
+        "label": "Fortinet FortiRecon EASM",
+        "category": "Attack Surface Management",
+        "description": "FortiRecon is a Digital Risk Protection Service (DRPS) product that provides an outside-the-network view to the risks posed to your enterprise.",
+        "publisher": null,
+        "operation_roles": [],
+        "configurations": [],
+        "dataImports": [],
+        "install_mode": "rpm"
+    },
+    {
+        "name": "servicenow",
+        "label": "ServiceNow",
+        "category": "CMDB",
+        "description": "ServiceNow connector provides functionality to create, read, update and delete records of Table and Catalog type",
+        "publisher": null,
+        "operation_roles": [],
+        "configurations": [],
+        "dataImports": [],
+        "install_mode": "rpm"
+    }
+]
