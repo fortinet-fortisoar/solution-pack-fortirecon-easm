@@ -3,7 +3,7 @@
         "@type": "Scenario",
         "configuration": null,
         "title": "Certificate Issue Discovered",
-        "description": "FortiRecon EASM detects a certificate issue on assets: <br>\nObserve the following\n\n* Reported Information (Typo Domain, Original Domain, Severity Score and Status) is presented as a handy reference\n* On receiving information from FortiRecon related to Typo Squatting possibility, High Risk Typo Domain Response Playbook activates and creates manual tasks to raise typo domain takedown request.",
+        "description": "FortiRecon EASM detects a certificate issue on assets: <br>\nObserve the following\n\n* Reported Information (Asset, Bucket, Bucket ID, Status, Severity and User Name) is presented as a handy reference\n* On receiving information from FortiRecon related to certificate issue for an asset, Certificate Issue Response Playbook activates and creates ServiceNow ticket to fix the same.",
         "steps": {
             "Steps": [
                 {
@@ -21,7 +21,7 @@
         "createUser": "\/api\/3\/people\/3451141c-bac6-467c-8d72-85e0fab569ce",
         "createDate": 1675687468.037701,
         "modifyUser": "\/api\/3\/appliances\/57545210-2adc-472b-a24f-2df6ee8dfe63",
-        "modifyDate": 1676357672.397088,
+        "modifyDate": 1676363855.182445,
         "id": 5,
         "recordTags": [
             "FortiRecon",
