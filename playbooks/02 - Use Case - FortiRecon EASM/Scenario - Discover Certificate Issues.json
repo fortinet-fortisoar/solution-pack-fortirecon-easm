@@ -17,56 +17,28 @@
     "steps": [
         {
             "@type": "WorkflowStep",
-            "name": "Create Demo Alert",
+            "name": "Create Alert",
             "description": null,
             "arguments": {
-                "when": "{{vars.steps.Fetch_Certificate_Issue.data.hits | length > 0}}",
                 "for_each": {
                     "item": "{{vars.highRiskIssues}}",
-                    "__bulk": true,
                     "parallel": false,
-                    "condition": "",
-                    "batch_size": 100
+                    "condition": ""
                 },
-                "resource": {
-                    "name": "{{vars.item['issue_name']}} for Asset {{vars.item.asset}}",
-                    "type": "\/api\/3\/picklists\/574a6ee2-7265-4701-815e-cff83b053bce",
-                    "state": "\/api\/3\/picklists\/a1bac09b-1441-45aa-ad1b-c88744e48e72",
-                    "source": "FortiRecon EASM",
-                    "status": "\/api\/3\/picklists\/7de816ff-7140-4ee5-bd05-93ce22002146",
-                    "severity": "{{\"Severity\" | picklist(vars.item.severity|capitalize, \"@id\")}}",
-                    "sourceId": "{{vars.item.id}}",
-                    "__replace": "true",
-                    "recordTags": [
-                        "\/api\/3\/tags\/FortiRecon",
-                        "\/api\/3\/tags\/EASM"
-                    ],
-                    "sourcePort": "{{vars.item.port}}",
-                    "sourcedata": "{{ vars.item | toJSON}}",
-                    "description": "<p>FortiRecon EASM has discovered the following certificate issue on the asset:<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th><b>Asset <\/b><\/th> <td> {{vars.item.asset}}<\/td>\n<\/tr>\n<tr>\n<th><b>Bucket <\/b><\/th> <td>{{vars.item['bucket']}}<\/td>\n<\/tr>\n<tr>\n<th><b>Bucket ID <\/b><\/th> <td> {{vars.item['bucket_id']}}<\/td>\n<\/tr>\n<tr>\n<th><b>Status <\/b><\/th> <td> {{vars.item.status | capitalize or 'NA'}}<\/td>\n<\/tr>\n<tr>\n<th><b>Severity <\/b><\/th> <td> {{vars.item.severity | capitalize or 'NA'}}<\/td>\n<\/tr>\n<tr>\n<th><b>User Name <\/b><\/th> <td> {{vars.item['user_name'] or 'NA'}}<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n",
-                    "targetAsset": "{{vars.item.asset}}",
-                    "ackSlaStatus": "\/api\/3\/picklists\/72979f64-e8b9-4888-a965-957e0ec24818",
-                    "respSlaStatus": "\/api\/3\/picklists\/72979f64-e8b9-4888-a965-957e0ec24818",
-                    "priorityWeight": 1,
-                    "escalatedtoincident": "\/api\/3\/picklists\/2128a09c-153d-4db3-985d-de6be33deae5",
-                    "alertRemainingAckSLA": 0
+                "arguments": {
+                    "issueData": "{{vars.item}}"
                 },
-                "operation": "Overwrite",
-                "collection": "\/api\/3\/upsert\/alerts",
-                "__recommend": [],
-                "fieldOperation": {
-                    "recordTags": "Overwrite"
-                },
-                "step_variables": {
-                    "createdAlertsIRIList": "{{vars.result | json_query('[].\"@id\"')}}"
-                }
+                "apply_async": false,
+                "step_variables": [],
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/38106a92-aae2-4bc7-ad47-23a2f0243786"
             },
             "status": null,
             "top": "435",
             "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "35ef4c39-60dc-4bdf-99c7-0b4e6cfb7c9e"
+            "uuid": "1f818a2a-fc89-4e0a-bd4b-c36f51c52762"
         },
         {
             "@type": "WorkflowStep",
@@ -91,8 +63,7 @@
             "name": "Configuration",
             "description": null,
             "arguments": {
-                "useMockOutput": "{{globalVars.Demo_mode}}",
-                "createdAlertsIRIList": "[]"
+                "useMockOutput": "{{globalVars.Demo_mode}}"
             },
             "status": null,
             "top": "165",
@@ -106,7 +77,7 @@
             "name": "Get Created Alerts IDs",
             "description": null,
             "arguments": {
-                "@id": "{{vars.createdAlertsIRIList}}"
+                "@id": "{{vars.steps.Create_Alert | json_query('[].alertIRI')}}"
             },
             "status": null,
             "top": "570",
@@ -124,7 +95,7 @@
                 "config": "32ae5ee4-e991-4767-ad12-bc65da371245",
                 "params": {
                     "page": "",
-                    "size": "",
+                    "size": 100,
                     "asset": "",
                     "status": "",
                     "severity": "",
@@ -137,7 +108,7 @@
                 "version": "1.0.0",
                 "connector": "fortinet-fortirecon-easm",
                 "operation": "get_issues_discovered",
-                "mock_result": "{\n  \"data\": {\n    \"hits\": [\n      {\n        \"id\": \"6284d0fadbb73af1cab5ade5\",\n        \"port\": null,\n        \"asset\": \"acmedemo.de\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ade4\",\n        \"port\": null,\n        \"asset\": \"acmedemo.de\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"high\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5adb3\",\n        \"port\": null,\n        \"asset\": \"acmedemo1cameracloud.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"high\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad99\",\n        \"port\": null,\n        \"asset\": \"acmedemo.fr\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"critical\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad98\",\n        \"port\": null,\n        \"asset\": \"acmedemo.fr\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad8d\",\n        \"port\": null,\n        \"asset\": \"acmedemo1devsecops.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad83\",\n        \"port\": null,\n        \"asset\": \"acmedemo1gslb.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad72\",\n        \"port\": null,\n        \"asset\": \"acmedemo1voice.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0f9dbb73af1cab5ad5b\",\n        \"port\": null,\n        \"asset\": \"acmedemo.tw\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0f9dbb73af1cab5ad5a\",\n        \"port\": null,\n        \"asset\": \"acmedemo.tw\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"total\": 85\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null,\n  \"execution_time\": \"1 seconds 308 ms\"\n}",
+                "mock_result": "{\n  \"data\": {\n    \"hits\": [\n      {\n        \"id\": \"6284d0fadbb73af1cab5ade5\",\n        \"port\": null,\n        \"asset\": \"acmedemo.de\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ade4\",\n        \"port\": null,\n        \"asset\": \"go.demo5.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"high\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5adb3\",\n        \"port\": null,\n        \"asset\": \"sedemo.demo5.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"high\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad99\",\n        \"port\": null,\n        \"asset\": \"info.demo5.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"critical\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad98\",\n        \"port\": null,\n        \"asset\": \"acmedemo.fr\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad8d\",\n        \"port\": null,\n        \"asset\": \"acmedemo1devsecops.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad83\",\n        \"port\": null,\n        \"asset\": \"acmedemo1gslb.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad72\",\n        \"port\": null,\n        \"asset\": \"acmedemo1voice.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0f9dbb73af1cab5ad5b\",\n        \"port\": null,\n        \"asset\": \"acmedemo.tw\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0f9dbb73af1cab5ad5a\",\n        \"port\": null,\n        \"asset\": \"acmedemo.tw\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"total\": 85\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null,\n  \"execution_time\": \"1 seconds 308 ms\"\n}",
                 "operationTitle": "Get Issues Discovered",
                 "pickFromTenant": false,
                 "step_variables": {
@@ -164,12 +135,21 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Create Demo Alert -> Get Created Alerts IDs",
+            "name": "Create Alert -> Get Created Alerts IDs",
             "targetStep": "\/api\/3\/workflow_steps\/b885d55f-714c-48be-a222-78057d334bfd",
-            "sourceStep": "\/api\/3\/workflow_steps\/35ef4c39-60dc-4bdf-99c7-0b4e6cfb7c9e",
+            "sourceStep": "\/api\/3\/workflow_steps\/1f818a2a-fc89-4e0a-bd4b-c36f51c52762",
             "label": null,
             "isExecuted": false,
-            "uuid": "66c9cef9-ccc1-4533-a7d3-9d0d11cb20ee"
+            "uuid": "3de93616-6759-482b-9518-1e769217bb7c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Fetch Certificate Issue -> Create Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/1f818a2a-fc89-4e0a-bd4b-c36f51c52762",
+            "sourceStep": "\/api\/3\/workflow_steps\/f275c3b8-d008-46a1-a99c-8caf5c8bc6a7",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "846dcdb8-0662-471f-a306-64215efe8e07"
         },
         {
             "@type": "WorkflowRoute",
@@ -179,15 +159,6 @@
             "label": null,
             "isExecuted": false,
             "uuid": "b6170dbc-2cde-4fa4-869b-ca95aa14c4f8"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Fetch Certificate Issue -> Create Demo Alert",
-            "targetStep": "\/api\/3\/workflow_steps\/35ef4c39-60dc-4bdf-99c7-0b4e6cfb7c9e",
-            "sourceStep": "\/api\/3\/workflow_steps\/f275c3b8-d008-46a1-a99c-8caf5c8bc6a7",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "eeb85d72-3c1f-4e19-824b-6b1da486399e"
         }
     ],
     "groups": [],
