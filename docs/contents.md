@@ -28,10 +28,11 @@ The **FortiRecon EASM** solution pack contains the following resources:
 |:-------------------------------------------------------------------------|
 
 
-| Playbook Name                             | Description                                                                                                  |
-|:------------------------------------------|:-------------------------------------------------------------------------------------------------------------|
-| Scenario - Discover Certificate Issues    | Fetches the list of certificate issues related to assets discovered in the most recent FortiRecon EASM scan. |
-| Certificate Issue Response                | Creates a ServiceNow incident for the asset with a certificate issue discovered in the FortiRecon EASM scan. |
+| Playbook Name                                           | Description                                                                                                  |
+|:--------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------|
+| Scenario - Discover Certificate Issues                  | Fetches the list of certificate issues related to assets discovered in the most recent FortiRecon EASM scan. |
+| > Scenario - Create Assets/Alerts for Certificate Issue | Create and link alert to the asset affected by the certificate issue                                         |
+| Certificate Issue Response                              | Creates a ServiceNow incident for the asset with a certificate issue discovered in the FortiRecon EASM scan. |
 
 
 >**Warning:** We recommend you clone these playbooks before customizing to avoid information loss while upgrading the solution pack.
