@@ -8,7 +8,7 @@
         {
             "@id": "\/api\/3\/picklists\/3e127bab-3c49-4918-aebc-d9a9bfb05514",
             "@type": "Picklist",
-            "itemValue": "Certificate Expiry",
+            "itemValue": "Certificate Monitoring",
             "orderIndex": 27,
             "color": null,
             "icon": null,

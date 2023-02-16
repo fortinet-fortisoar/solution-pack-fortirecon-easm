@@ -7,7 +7,7 @@
 
 # Overview
 
-The **FortiRecon EASM Solution Pack** offering helps customers to readily orchestrate the investigation and alerting of issues like Certificate Issues related to assets discovered by FortiRecon.
+The **FortiRecon EASM Solution Pack** helps customers to readily orchestrate the investigation and alerting of issues like Certificate Expiry, Invalid SSL Certificates etc. discovered by FortiRecon.
 
 This solution pack includes scenarios and use case playbooks that respond to the alerts raised for certificate issues related to the assets and creates a ServiceNow Ticket to fix the same.
 

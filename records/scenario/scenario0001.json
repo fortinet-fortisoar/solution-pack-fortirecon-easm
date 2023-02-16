@@ -3,7 +3,7 @@
         "@type": "Scenario",
         "configuration": null,
         "title": "Certificate Issue Discovered",
-        "description": "FortiRecon EASM detects a certificate issue on assets: <br>\nObserve the following\n\n* Reported Information (Asset, Bucket, Bucket ID, Status, Severity and User Name) is presented as a handy reference\n* On receiving information from FortiRecon related to certificate issue for an asset, Certificate Issue Response Playbook activates and creates ServiceNow ticket to fix the same.",
+        "description": "FortiRecon EASM detects a certificate issue on assets: <br>\nObserve the following\n\n* Reported Information (Asset, Bucket, Bucket ID, Status, Severity and User Name) is presented as a handy reference\n* On receiving information from FortiRecon related to certificate issue for an asset, **Certificate Issue Response Playbook** activates and creates ServiceNow ticket to fix the same.",
         "steps": {
             "Steps": [
                 {
