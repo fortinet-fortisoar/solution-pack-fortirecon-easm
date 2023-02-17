@@ -1,0 +1,326 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "> Scenario - Create Assets\/Alerts for Certificate Issue",
+    "aliasName": null,
+    "tag": null,
+    "description": "Create and link alert to the asset affected by the certificate issue",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [
+        "issueData"
+    ],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/2d0eb900-fa5b-4c05-8caa-a170717b8ed1",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/d9808eeb-9704-4ee8-be52-7c9e5e24a169",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Affected Asset",
+            "description": "Checks if asset record is present for the affected asset.",
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "hostname",
+                            "value": "{{vars.assetHostName}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ]
+                },
+                "module": "assets?$limit=30",
+                "step_variables": {
+                    "assetIRI": "['{{vars.result[0]['@id']}}']"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "01c603bb-afca-4f9b-acce-8adf815d8bad"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Step Output",
+            "description": null,
+            "arguments": {
+                "alertIRI": "{{vars.steps.Create_Demo_Alert['@id']}}"
+            },
+            "status": null,
+            "top": "975",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "168034b8-e426-474f-a98f-2390f9e724f0"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Asset Details",
+            "description": null,
+            "arguments": {
+                "name": "Fortinet FortiRecon EASM",
+                "config": "32ae5ee4-e991-4767-ad12-bc65da371245",
+                "params": {
+                    "page": "",
+                    "size": "",
+                    "asset": "{{vars.assetHostName}}",
+                    "ports": "",
+                    "domain": "",
+                    "technologies": ""
+                },
+                "version": "1.0.0",
+                "connector": "fortinet-fortirecon-easm",
+                "operation": "get_subdomains",
+                "mock_result": "{% if 'info' in vars.assetHostName %}{\n  \"data\": {\n    \"hits\": [\n      {\n        \"id\": \"6284d0eedbb73af1cab59a49\",\n        \"asset\": \"info.demo5.com\",\n        \"ports\": [\n          80,\n          443\n        ],\n        \"ip_address\": \"54.237.197.50\",\n        \"domain_name\": \"demo5.com\",\n        \"technologies\": []\n      }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"total\": 1\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null,\n  \"execution_time\": \"1 seconds 1 ms\"\n}{% elif 'sedemo' in vars.assetHostName %}{\n  \"data\": {\n    \"hits\": [\n      {\n        \"id\": \"6284d0eedbb73af1cab59a4b\",\n        \"asset\": \"sedemo.demo5.com\",\n        \"ports\": [\n          8443\n        ],\n        \"ip_address\": \"166.88.17.165\",\n        \"domain_name\": \"demo5.com\",\n        \"technologies\": []\n      }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"total\": 1\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null,\n  \"execution_time\": \"1 seconds 28 ms\"\n}{% elif 'go' in vars.assetHostName %}{\n  \"data\": {\n    \"hits\": [\n      {\n        \"id\": \"6284d0eedbb73af1cab59a4c\",\n        \"asset\": \"go.demo5.com\",\n        \"ports\": [\n          80,\n          443\n        ],\n        \"ip_address\": \"52.21.178.134\",\n        \"domain_name\": \"demo5.com\",\n        \"technologies\": [\n          \"Pardot\",\n          \"jQuery Migrate\",\n          \"jQuery UI\",\n          \"Bootstrap\",\n          \"jQuery\",\n          \"Prototype\"\n        ]\n      }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"total\": 1\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null,\n  \"execution_time\": \"1 seconds 57 ms\"\n}{% endif %}",
+                "operationTitle": "Get Subdomains",
+                "pickFromTenant": false,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "580",
+            "left": "420",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "3867ecc8-3dbb-430b-bf2a-05e0643b8ef4"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Demo Alert",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "content": "<p>{% if vars.assetIRI | length == 0 %}<\/p>\n<p>No record found for the Asset<strong>{{vars.assetHostName}}<\/strong> in FortiRecon EASM.<\/p>\n<p>{% else %}<\/p>\n<p>Asset <strong>{{vars.assetHostName}}<\/strong> has been linked to the alert.<\/p>\n<p>{% endif %}<\/p>",
+                    "records": "{{vars.result['@id']}}"
+                },
+                "resource": {
+                    "name": "{{vars.input.params.issueData['issue_name']}} for Asset {{vars.input.params.issueData.asset}}",
+                    "type": "\/api\/3\/picklists\/3e127bab-3c49-4918-aebc-d9a9bfb05514",
+                    "state": "\/api\/3\/picklists\/a1bac09b-1441-45aa-ad1b-c88744e48e72",
+                    "assets": "{% if vars.assetIRI %}{{vars.assetIRI}}{% endif %}",
+                    "source": "FortiRecon EASM",
+                    "status": "\/api\/3\/picklists\/7de816ff-7140-4ee5-bd05-93ce22002146",
+                    "severity": "{{\"Severity\" | picklist(vars.input.params.issueData.severity|capitalize, \"@id\")}}",
+                    "sourceId": "{{vars.input.params.issueData.id}}",
+                    "__replace": "true",
+                    "recordTags": [
+                        "\/api\/3\/tags\/FortiRecon",
+                        "\/api\/3\/tags\/EASM"
+                    ],
+                    "sourcePort": "{{vars.input.params.issueData.port}}",
+                    "sourcedata": "{{ vars.input.params.issueData | toJSON }}",
+                    "description": "<p>FortiRecon EASM has discovered the following certificate issue on the asset:<\/p>\n<br>\n<table>\n<tbody>\n<tr>\n<th><b>Asset <\/b><\/th> <td> {{vars.input.params.issueData.asset}}<\/td>\n<\/tr>\n<tr>\n<th><b>Bucket <\/b><\/th> <td>{{vars.input.params.issueData['bucket']}}<\/td>\n<\/tr>\n<tr>\n<th><b>Bucket ID <\/b><\/th> <td> {{vars.input.params.issueData['bucket_id']}}<\/td>\n<\/tr>\n<tr>\n<th><b>Status <\/b><\/th> <td> {{vars.input.params.issueData.status | capitalize or 'NA'}}<\/td>\n<\/tr>\n<tr>\n<th><b>Severity <\/b><\/th> <td> {{vars.input.params.issueData.severity | capitalize or 'NA'}}<\/td>\n<\/tr>\n<tr>\n<th><b>User Name <\/b><\/th> <td> {{vars.input.params.issueData['user_name'] or 'NA'}}<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n",
+                    "targetAsset": "{{vars.input.params.issueData.asset}}",
+                    "ackSlaStatus": "\/api\/3\/picklists\/72979f64-e8b9-4888-a965-957e0ec24818",
+                    "respSlaStatus": "\/api\/3\/picklists\/72979f64-e8b9-4888-a965-957e0ec24818",
+                    "priorityWeight": 1,
+                    "escalatedtoincident": "\/api\/3\/picklists\/2128a09c-153d-4db3-985d-de6be33deae5",
+                    "alertRemainingAckSLA": 0
+                },
+                "_showJson": false,
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/upsert\/alerts",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "840",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "42a04f6d-bda8-407e-bc74-46f0617b2fd6"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is Asset Record Found",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Yes",
+                        "step_iri": "\/api\/3\/workflow_steps\/42a04f6d-bda8-407e-bc74-46f0617b2fd6",
+                        "condition": "{{ vars.steps.Find_Affected_Asset | length > 0 }}",
+                        "step_name": "Create Demo Alert"
+                    },
+                    {
+                        "option": "No",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/3867ecc8-3dbb-430b-bf2a-05e0643b8ef4",
+                        "step_name": "Get Asset Details"
+                    }
+                ]
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "6b149f66-40ee-4d9b-bd59-e26b56f6ea6d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Asset",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.steps.Get_Asset_Details.data.hits | length > 0}}",
+                "resource": {
+                    "ip": "{{vars.steps.Get_Asset_Details.data.hits[0]['ip_address']}}",
+                    "name": "{{vars.assetHostName}}",
+                    "hostname": "{{vars.assetHostName}}",
+                    "__replace": "",
+                    "assetRisk": "{{\"AssetRisk\" | picklist(vars.input.params.issueData.severity|capitalize, \"@id\")}}",
+                    "deviceUid": "{{vars.steps.Get_Asset_Details.data.hits[0].id}}",
+                    "macAddress": "NA",
+                    "description": "**Ports:** {% if vars.steps.Get_Asset_Details.data.hits[0].ports | length > 0 %}{{vars.steps.Get_Asset_Details.data.hits[0].ports | join(', ')}}{% else %}NA{% endif %}\n**Technologies:** {% if vars.steps.Get_Asset_Details.data.hits[0].technologies %}{{vars.steps.Get_Asset_Details.data.hits[0].technologies}}{% else %}NA{% endif %}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/assets",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": {
+                    "assetIRI": "['{{vars.result['@id']}}']"
+                }
+            },
+            "status": null,
+            "top": "700",
+            "left": "420",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "6ca680dd-ba9b-4c9a-b878-c1d2ba548916"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "assetIRI": "[]",
+                "assetHostName": "{{vars.input.params.issueData.asset}}",
+                "useMockOutput": "{{globalVars.Demo_mode}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "9a1e38d7-d4cd-4216-84d0-e8ca6e1f4abe"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "d9808eeb-9704-4ee8-be52-7c9e5e24a169"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Find Affected Asset -> Is Asset Record Found",
+            "targetStep": "\/api\/3\/workflow_steps\/6b149f66-40ee-4d9b-bd59-e26b56f6ea6d",
+            "sourceStep": "\/api\/3\/workflow_steps\/01c603bb-afca-4f9b-acce-8adf815d8bad",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "0584d662-7747-428c-9679-902ea3e1b75e"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Asset Record Found -> Create Demo Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/42a04f6d-bda8-407e-bc74-46f0617b2fd6",
+            "sourceStep": "\/api\/3\/workflow_steps\/6b149f66-40ee-4d9b-bd59-e26b56f6ea6d",
+            "label": "Yes",
+            "isExecuted": false,
+            "uuid": "0f2f8ddf-62f5-447d-8e3b-dc13c82d7ac8"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Cofiguration -> Find Asset Record",
+            "targetStep": "\/api\/3\/workflow_steps\/01c603bb-afca-4f9b-acce-8adf815d8bad",
+            "sourceStep": "\/api\/3\/workflow_steps\/9a1e38d7-d4cd-4216-84d0-e8ca6e1f4abe",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "27460bc1-49cd-4b11-a700-e33b76c63350"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Asset Details -> Create Asset",
+            "targetStep": "\/api\/3\/workflow_steps\/6ca680dd-ba9b-4c9a-b878-c1d2ba548916",
+            "sourceStep": "\/api\/3\/workflow_steps\/3867ecc8-3dbb-430b-bf2a-05e0643b8ef4",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "399e8920-3e28-4405-ab69-9dbe9aa5f299"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Create Demo Alert -> Step Output",
+            "targetStep": "\/api\/3\/workflow_steps\/168034b8-e426-474f-a98f-2390f9e724f0",
+            "sourceStep": "\/api\/3\/workflow_steps\/42a04f6d-bda8-407e-bc74-46f0617b2fd6",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "6235fca3-1b43-45c0-80e9-05e965071999"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Asset Record Found -> Get Asset Details",
+            "targetStep": "\/api\/3\/workflow_steps\/3867ecc8-3dbb-430b-bf2a-05e0643b8ef4",
+            "sourceStep": "\/api\/3\/workflow_steps\/6b149f66-40ee-4d9b-bd59-e26b56f6ea6d",
+            "label": "No",
+            "isExecuted": false,
+            "uuid": "a27eabc5-aeb5-47a6-9928-5aefdb019c4e"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Cofiguration",
+            "targetStep": "\/api\/3\/workflow_steps\/9a1e38d7-d4cd-4216-84d0-e8ca6e1f4abe",
+            "sourceStep": "\/api\/3\/workflow_steps\/d9808eeb-9704-4ee8-be52-7c9e5e24a169",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "c9d342bf-aa55-4f12-8635-95488ab3d5ce"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Create Asset -> Create Demo Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/42a04f6d-bda8-407e-bc74-46f0617b2fd6",
+            "sourceStep": "\/api\/3\/workflow_steps\/6ca680dd-ba9b-4c9a-b878-c1d2ba548916",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "f1e0d67d-1c47-445b-bfb6-0665a2207e1b"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "38106a92-aae2-4bc7-ad47-23a2f0243786",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "Referenced",
+        "Scenario"
+    ]
+}

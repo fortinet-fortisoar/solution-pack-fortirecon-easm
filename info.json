@@ -1,0 +1,67 @@
+{
+    "name": "fortiReconEASM",
+    "version": "1.0.0",
+    "fsrMinCompatibility": "7.2.0",
+    "type": "solutionpack",
+    "local": true,
+    "label": "FortiRecon EASM",
+    "dependencies": [
+        {
+            "name": "sOARFramework",
+            "type": "solutionpack",
+            "label": "SOAR Framework",
+            "minVersion": null
+        },
+        {
+            "name": "socSimulator",
+            "type": "solutionpack",
+            "label": "SOC Simulator",
+            "minVersion": null
+        }
+    ],
+    "prerequisite": null,
+    "publisher": "Fortinet",
+    "description": "This FortiSOAR Solution Pack for FortiRecon's EASM helps customers to readily orchestrate the investigation and alerting of issues like Certificate Expiry, Invalid SSL Certificates etc. discovered by FortiRecon.",
+    "help": "https://github.com/fortinet-fortisoar/solution-pack-fortirecon-easm/blob/release/1.0.0/README.md",
+    "category": [
+        "Attack surface management"
+    ],
+    "supportInfo": null,
+    "iconLarge": null,
+    "recordTags": [
+        "FortiRecon",
+        "EASM",
+        "Certificate"
+    ],
+    "date": "2023-02-16T06:11:23+00:00",
+    "contents": {
+        "picklistNames": [
+            {
+                "name": "AlertType"
+            }
+        ],
+        "playbooks": [
+            {
+                "name": "02 - Use Case - FortiRecon EASM"
+            }
+        ],
+        "globalVariables": [],
+        "connectors": [
+            {
+                "name": "Fortinet FortiRecon EASM",
+                "apiName": "fortinet-fortirecon-easm"
+            },
+            {
+                "name": "ServiceNow",
+                "apiName": "servicenow"
+            }
+        ],
+        "recordSets": [
+            {
+                "name": "Scenario",
+                "apiName": "scenario",
+                "count": 1
+            }
+        ]
+    }
+}

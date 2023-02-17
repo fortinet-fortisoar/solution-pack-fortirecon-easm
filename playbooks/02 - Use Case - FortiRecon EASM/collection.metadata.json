@@ -1,0 +1,11 @@
+{
+    "@context": "\/api\/3\/contexts\/WorkflowCollection",
+    "@type": "WorkflowCollection",
+    "name": "02 - Use Case - FortiRecon EASM",
+    "description": null,
+    "visible": true,
+    "image": null,
+    "uuid": "2d0eb900-fa5b-4c05-8caa-a170717b8ed1",
+    "deletedAt": null,
+    "recordTags": []
+}
