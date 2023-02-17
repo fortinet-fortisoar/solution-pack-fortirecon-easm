@@ -1,0 +1,174 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Scenario - Discover Certificate Issues",
+    "aliasName": null,
+    "tag": null,
+    "description": "Fetches the list of certificate issues related to assets discovered in the most recent FortiRecon EASM scan.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/2d0eb900-fa5b-4c05-8caa-a170717b8ed1",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/79bacccf-f271-4860-8d71-abcd87d05e8d",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Alert",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.highRiskIssues}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "arguments": {
+                    "issueData": "{{vars.item}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/38106a92-aae2-4bc7-ad47-23a2f0243786"
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "1f818a2a-fc89-4e0a-bd4b-c36f51c52762"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                }
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "79bacccf-f271-4860-8d71-abcd87d05e8d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "useMockOutput": "{{globalVars.Demo_mode}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "845f6712-664c-4824-9571-1c52467a0057"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Created Alerts IDs",
+            "description": null,
+            "arguments": {
+                "@id": "{{vars.steps.Create_Alert | json_query('[].alertIRI')}}"
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "b885d55f-714c-48be-a222-78057d334bfd"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Fetch Certificate Issue",
+            "description": null,
+            "arguments": {
+                "name": "Fortinet FortiRecon EASM",
+                "config": "32ae5ee4-e991-4767-ad12-bc65da371245",
+                "params": {
+                    "page": "",
+                    "size": 100,
+                    "asset": "",
+                    "status": "",
+                    "severity": "",
+                    "bucket_id": [
+                        "Certificate Issues"
+                    ],
+                    "countries": "",
+                    "issue_name_identifier": ""
+                },
+                "version": "1.0.0",
+                "connector": "fortinet-fortirecon-easm",
+                "operation": "get_issues_discovered",
+                "mock_result": "{\n  \"data\": {\n    \"hits\": [\n      {\n        \"id\": \"6284d0fadbb73af1cab5ade5\",\n        \"port\": null,\n        \"asset\": \"acmedemo.de\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ade4\",\n        \"port\": null,\n        \"asset\": \"go.demo5.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"high\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5adb3\",\n        \"port\": null,\n        \"asset\": \"sedemo.demo5.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"high\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad99\",\n        \"port\": null,\n        \"asset\": \"info.demo5.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"critical\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad98\",\n        \"port\": null,\n        \"asset\": \"acmedemo.fr\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad8d\",\n        \"port\": null,\n        \"asset\": \"acmedemo1devsecops.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad83\",\n        \"port\": null,\n        \"asset\": \"acmedemo1gslb.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0fadbb73af1cab5ad72\",\n        \"port\": null,\n        \"asset\": \"acmedemo1voice.com\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Invalid SSL Certificate\",\n        \"issue_name_identifier\": \"invalid_ssl_certificate\"\n      },\n      {\n        \"id\": \"6284d0f9dbb73af1cab5ad5b\",\n        \"port\": null,\n        \"asset\": \"acmedemo.tw\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Untrusted Chain Issues\",\n        \"issue_name_identifier\": \"untrusted_chain_issue\"\n      },\n      {\n        \"id\": \"6284d0f9dbb73af1cab5ad5a\",\n        \"port\": null,\n        \"asset\": \"acmedemo.tw\",\n        \"bucket\": \"Certificate Issues\",\n        \"status\": \"active\",\n        \"severity\": \"low\",\n        \"bucket_id\": \"certificate_issues\",\n        \"user_name\": null,\n        \"issue_name\": \"Expired Certificate\",\n        \"issue_name_identifier\": \"expired_certificate\"\n      }\n    ],\n    \"page\": 1,\n    \"size\": 10,\n    \"total\": 85\n  },\n  \"status\": \"Success\",\n  \"message\": \"\",\n  \"operation\": null,\n  \"execution_time\": \"1 seconds 308 ms\"\n}",
+                "operationTitle": "Get Issues Discovered",
+                "pickFromTenant": false,
+                "step_variables": {
+                    "highRiskIssues": "{{ vars.result.data.hits | json_query(\"[?severity == 'critical' || severity == 'high']\") }}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "f275c3b8-d008-46a1-a99c-8caf5c8bc6a7"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/845f6712-664c-4824-9571-1c52467a0057",
+            "sourceStep": "\/api\/3\/workflow_steps\/79bacccf-f271-4860-8d71-abcd87d05e8d",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "0b0b423d-4cff-41cc-a64c-28e4bc46c45f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Create Alert -> Get Created Alerts IDs",
+            "targetStep": "\/api\/3\/workflow_steps\/b885d55f-714c-48be-a222-78057d334bfd",
+            "sourceStep": "\/api\/3\/workflow_steps\/1f818a2a-fc89-4e0a-bd4b-c36f51c52762",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "3de93616-6759-482b-9518-1e769217bb7c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Fetch Certificate Issue -> Create Alert",
+            "targetStep": "\/api\/3\/workflow_steps\/1f818a2a-fc89-4e0a-bd4b-c36f51c52762",
+            "sourceStep": "\/api\/3\/workflow_steps\/f275c3b8-d008-46a1-a99c-8caf5c8bc6a7",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "846dcdb8-0662-471f-a306-64215efe8e07"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Fetch Critical Certificate Issue",
+            "targetStep": "\/api\/3\/workflow_steps\/f275c3b8-d008-46a1-a99c-8caf5c8bc6a7",
+            "sourceStep": "\/api\/3\/workflow_steps\/845f6712-664c-4824-9571-1c52467a0057",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "b6170dbc-2cde-4fa4-869b-ca95aa14c4f8"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "b3a49e1e-7cd5-4fcc-9977-fb5b0132346b",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "Referenced",
+        "Scenario"
+    ]
+}
