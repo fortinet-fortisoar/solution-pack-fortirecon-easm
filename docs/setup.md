@@ -21,4 +21,7 @@ The **FortiRecon EASM** solution pack depends on the following solution packs th
 For optimal performance of the **FortiRecon EASM** solution pack, you must configure:
 
 - Fortinet FortiRecon EASM connectors to get certificate issues
-    - To configure and use the Fortinet FortiRecon EASM connector, refer to [Configuring Fortinet FortiRecon EASM](https://docs.fortinet.com/document/fortisoar/1.0.0/fortinet-fortirecon-easm/481/fortinet-fortirecon-easm-v1-0-0)
+    - To configure and use the Fortinet FortiRecon EASM connector, refer to [Configuring Fortinet FortiRecon EASM](https://docs.fortinet.com/fortisoar/connectors/fortinet-fortirecon-easm)
+
+- ServiceNow connector to log a ticket for fixing certificate issues detected by FortiRecon EASM
+    - To configure and use the ServiceNow connector, refer to [Configuring ServiceNow](https://docs.fortinet.com/fortisoar/connectors/servicenow-v2-0-1)
