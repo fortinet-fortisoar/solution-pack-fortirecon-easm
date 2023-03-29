@@ -13,17 +13,24 @@ This scenario generates an example alert of Type *Certificate Monitoring* in For
 Navigate to demo alert and note the following:
 
 - The demo alert created is an example of a FortiRecon EASM scan detecting a certificate issue on the asset
+
 - The alert is of type *Certificate Monitoring*
+
 - The reported alert contains the following information:
+
     - Certificate Issue Details:
+
         - Asset Name
         - Bucket
         - Bucket ID
         - Severity 
         - Status
         - User Name
+
     - Source
+
     - Source ID
+
     - Type
 
 - The response playbook `Certificate Issue Response` runs automatically when all the indicators are extracted and enriched
